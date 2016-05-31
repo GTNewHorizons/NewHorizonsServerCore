@@ -1,0 +1,5 @@
+MaxDeath: 10 # Max amount of deaths before the module will start to verify join-permission
+Messages:
+  BannedMessage: '&4Your trial has finished! &2Contact an Admin to get full access'
+  KickMessage: '&4Your trial has ended. &2Contact an Admin to get full access'
+  TrialWarning: 'This was death %d. Your trial ends if you reach %d'
