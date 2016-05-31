@@ -15,6 +15,13 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import eu.usrv.NewHorizonsServerCore.NewHorizonsServerCore;
 
 
+/**
+ * Simple TrialKick function. Grants a certain amount of Deaths for any player
+ * before they have to apply for a permanent slot on the Server
+ * 
+ * @author Namikon
+ *
+ */
 public class TrialKick implements Listener
 {
   public static final String GTNH_PERM_FULL_MEMBER = "GTNH.FullMember";

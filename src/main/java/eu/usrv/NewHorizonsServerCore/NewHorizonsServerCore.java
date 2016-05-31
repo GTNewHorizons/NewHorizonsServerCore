@@ -19,15 +19,27 @@ public final class NewHorizonsServerCore extends JavaPlugin
     Instance = this;
   }
 
+  @Override
   public void onEnable()
   {
+    getLogger().info( "Loading configuration..." );
     mConfig = getConfig();
     saveDefaultConfig();
     mConfig.options().copyDefaults( true );
+    
+    getLogger().info( "Enabling TrialKick submodule..." );
     mModule_TrialKick = new TrialKick( this );
 
     getServer().getPluginManager().registerEvents( mModule_TrialKick, this );
-    mConfig = getConfig();
-    saveDefaultConfig();
+  }
+  
+  @Override
+  public void onDisable()
+  {
+    getLogger().info( "Saving configuration..." );
+    saveConfig();
+    
+    // Disabling modules
+    mModule_TrialKick = null;
   }
 }
