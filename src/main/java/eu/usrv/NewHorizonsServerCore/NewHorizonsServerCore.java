@@ -2,23 +2,44 @@
 package eu.usrv.NewHorizonsServerCore;
 
 
+import java.sql.Connection;
+import java.sql.SQLException;
+
 import org.bukkit.configuration.file.FileConfiguration;
+import com.huskehhh.mysql.sqlite.SQLite;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import eu.usrv.NewHorizonsServerCore.modTrialKick.TrialKick;
 
+/*
+ * https://bukkit.org/threads/using-mysql-in-your-plugins.132309/
+ * 
+ */
 
 public final class NewHorizonsServerCore extends JavaPlugin
 {
   public NewHorizonsServerCore Instance;
   public FileConfiguration mConfig;
   public TrialKick mModule_TrialKick;
-
+  public static SQLite OfflineUUIDCache = new SQLite("OfflineUUIDCache.sqlite");
+  public Connection OUUIDCCon = null;
+  
   public NewHorizonsServerCore()
   {
     Instance = this;
   }
 
+  private void setupDBCons()
+  {
+	  try {
+		OUUIDCCon = OfflineUUIDCache.openConnection();
+	} catch (ClassNotFoundException e) {
+		e.printStackTrace();
+	} catch (SQLException e) {
+		e.printStackTrace();
+	}
+  }
+  
   @Override
   public void onEnable()
   {
@@ -31,6 +52,9 @@ public final class NewHorizonsServerCore extends JavaPlugin
     mModule_TrialKick = new TrialKick( this );
 
     getServer().getPluginManager().registerEvents( mModule_TrialKick, this );
+    
+    getLogger().info( "Initializing Offline UUID Database..." );
+    setupDBCons();
   }
   
   @Override
