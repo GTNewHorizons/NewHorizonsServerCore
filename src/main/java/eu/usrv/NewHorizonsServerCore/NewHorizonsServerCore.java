@@ -5,17 +5,18 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Logger;
 
+import net.milkbowl.vault.economy.Economy;
+
 import org.bukkit.configuration.file.FileConfiguration;
+
 import com.huskehhh.mysql.sqlite.SQLite;
 
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-import eu.usrv.NewHorizonsServerCore.auxiliary.GMHook;
 
+import eu.usrv.NewHorizonsServerCore.auxiliary.GMHook;
 import eu.usrv.NewHorizonsServerCore.modRankUp.RankUpCommand;
 import eu.usrv.NewHorizonsServerCore.modTrialKick.TrialKick;
-import net.milkbowl.vault.economy.Economy;
-import net.milkbowl.vault.economy.EconomyResponse;
 
 
 /*
@@ -31,6 +32,7 @@ public final class NewHorizonsServerCore extends JavaPlugin
   public static SQLite OfflineUUIDCache = null; // new SQLite( "OfflineUUIDCache.sqlite" );
   public Connection OUUIDCCon = null;
   public GMHook mGMHook;
+  public static Economy econ = null;
 
   private RankUpCommand mModule_Rankup;
   public static Logger logger = null;
@@ -72,11 +74,13 @@ public final class NewHorizonsServerCore extends JavaPlugin
       getServer().getPluginManager().disablePlugin( this );
       return;
     }
-
+    
+    logger.info( "Connecting to GroupManager..." );
     mGMHook = new GMHook( this );
     logger.info( "Enabling TrialKick submodule..." );
     mModule_TrialKick = new TrialKick( this );
 
+    logger.info( "Registering RankUp command..." );
     mModule_Rankup = new RankUpCommand( this );
     getCommand( "rankup" ).setExecutor( mModule_Rankup );
     getServer().getPluginManager().registerEvents( mModule_TrialKick, this );
@@ -92,6 +96,7 @@ public final class NewHorizonsServerCore extends JavaPlugin
     {
       return false;
     }
+
     RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration( Economy.class );
     if( rsp == null )
     {
@@ -109,5 +114,6 @@ public final class NewHorizonsServerCore extends JavaPlugin
 
     // Disabling modules
     mModule_TrialKick = null;
+    mModule_Rankup = null;
   }
 }
