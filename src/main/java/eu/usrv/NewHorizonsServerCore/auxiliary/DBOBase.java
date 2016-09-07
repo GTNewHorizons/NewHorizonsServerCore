@@ -3,14 +3,17 @@ package eu.usrv.NewHorizonsServerCore.auxiliary;
 
 import java.lang.reflect.Field;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.Set;
+import java.util.UUID;
 
 import eu.usrv.NewHorizonsServerCore.NewHorizonsServerCore;
 import eu.usrv.NewHorizonsServerCore.modTrialKick.DBO.IDBO_SQLFields;
+import eu.usrv.NewHorizonsServerCore.modTrialKick.DBO.DBO_UUIDEntry.SQLFIELDS;
 
 
 public abstract class DBOBase
@@ -77,7 +80,7 @@ public abstract class DBOBase
       else
         tIsFirst = false;
 
-      tSQLNew_Fields += tField.getFieldName();
+      tSQLNew_Fields += tField.getSQLFieldName();
       tSQLNew_Values += "?";
     }
 
@@ -171,10 +174,43 @@ public abstract class DBOBase
       field.set( getClass(), Boolean.parseBoolean( value ) );
       return;
     }
+
+    if( UUID.class.isInstance( field ) )
+    {
+      field.set( getClass(), UUID.fromString( value ) );
+    }
     field.set( getClass(), value );
   }
 
-  public boolean Save()
+  public boolean doLoad()
+  {
+    boolean tRet = false;
+    try
+    {
+      ResultSet tRes = NewHorizonsServerCore.OfflineUUIDCache.querySQL( getLoadCommand() );
+
+      if( tRes != null )
+      {
+        for( IDBO_SQLFields tField : __eFieldEnum.getValues() )
+        {
+          if( tField.isReadOnlyProperty() )
+            continue;
+
+          setProperty( tField.getPropertyName(), tRes.getString( tField.getOrdinal() ) );
+          tRet = true;
+        }
+      }
+    }
+    catch( Exception e )
+    {
+      NewHorizonsServerCore.logger.severe( "Database Query failed:" );
+      e.printStackTrace();
+    }
+
+    return tRet;
+  }
+
+  public boolean doSave()
   {
     return false;
 

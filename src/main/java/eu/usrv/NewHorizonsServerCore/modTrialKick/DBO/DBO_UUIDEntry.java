@@ -16,13 +16,13 @@ public class DBO_UUIDEntry extends DBOBase
 {
   public enum SQLFIELDS implements IDBO_SQLFields 
   {
-    ID(Integer.class, true),
-    playerName(Integer.class),
-    playerUUID(String.class);
+    ID(/*Integer.class,*/"", true),
+    playerName(/*Integer.class*/"_mName"),
+    playerUUID(/*String.class*/"_mUUID");
     
     private String _mFieldName;
     private String _mPropertyName;
-    private Class<?> _mDataType;
+    //private Class<?> _mDataType;
     private boolean _mIsReadonly;
     
     @Override
@@ -46,7 +46,23 @@ public class DBO_UUIDEntry extends DBOBase
       return _mIsReadonly;
     }
     
-    @Override
+    private SQLFIELDS(String pFieldName)
+    {
+      _mFieldName = pFieldName;
+    }
+    
+    private SQLFIELDS(String pFieldName, boolean pIsReadOnly)
+    {
+      _mFieldName = pFieldName;
+      _mIsReadonly = pIsReadOnly;
+    }
+    
+    public int getOrdinal()
+    {
+      return this.ordinal();
+    }
+    
+/*    @Override
     public Class<?> getDataType()
     {
       return _mDataType;
@@ -67,12 +83,11 @@ public class DBO_UUIDEntry extends DBOBase
       _mFieldName = pFieldName;
       _mDataType = pDataType;
     }
-
+*/
     @Override
     public String getPropertyName()
     {
-      // TODO Auto-generated method stub
-      return null;
+      return _mPropertyName;
     }
   }
 
@@ -80,7 +95,7 @@ public class DBO_UUIDEntry extends DBOBase
   private UUID _mUUID;
   private int _mID;
 
-  public int getID()
+  public long getID()
   {
     return _mID;
   }
@@ -95,33 +110,7 @@ public class DBO_UUIDEntry extends DBOBase
     return _mName;
   }
 
-  /**
-   * Load ze data from ze database
-   * 
-   * @return
-   */
-  private boolean loadData()
-  {
-    boolean tRet = false;
-
-    try
-    {
-      ResultSet tRes = NewHorizonsServerCore.OfflineUUIDCache.querySQL( String.format( getLoadCommand(), _mID ) );
-      if( tRes != null )
-      {
-        _mUUID = UUID.fromString( tRes.getString( SQLFIELDS.playerUUID.ordinal() ) );
-        _mName = tRes.getString( SQLFIELDS.playerName.ordinal() );
-      }
-    }
-    catch( Exception e )
-    {
-
-    }
-
-    return tRet;
-  }
-
-  /**
+   /**
    * Instantiate our class with a DB ID. Triggers load
    * 
    * @param pDBID
@@ -130,7 +119,7 @@ public class DBO_UUIDEntry extends DBOBase
   public DBO_UUIDEntry( int pDBID ) throws Exception
   {
     _mID = pDBID;
-    if( !loadData() )
+    if( !doLoad() )
       throw new Exception( "Unknown ID found. Nothing to load" + String.format( "%d", pDBID ) );
   }
 
