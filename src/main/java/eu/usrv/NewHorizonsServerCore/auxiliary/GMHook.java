@@ -1,7 +1,6 @@
 
 package eu.usrv.NewHorizonsServerCore.auxiliary;
 
-
 import java.util.Arrays;
 import java.util.List;
 import org.anjocaido.groupmanager.GroupManager;
