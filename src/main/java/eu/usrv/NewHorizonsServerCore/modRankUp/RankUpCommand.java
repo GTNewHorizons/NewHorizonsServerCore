@@ -2,7 +2,6 @@
 package eu.usrv.NewHorizonsServerCore.modRankUp;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import net.milkbowl.vault.economy.EconomyResponse;
 
@@ -15,7 +14,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import eu.usrv.NewHorizonsServerCore.NewHorizonsServerCore;
-import eu.usrv.NewHorizonsServerCore.auxiliary.GMHook;
 
 
 public class RankUpCommand implements CommandExecutor
@@ -57,7 +55,7 @@ public class RankUpCommand implements CommandExecutor
     }
     Player player = (Player) pSender;
 
-    String tUserGroup = _mMain.mGMHook.getGroup( player );
+    String tUserGroup = NewHorizonsServerCore.perms.getPrimaryGroup( player );
 
     for (int i = 0; i < _mRanks.size(); i++)
     {
@@ -86,7 +84,7 @@ public class RankUpCommand implements CommandExecutor
             EconomyResponse eResp = _mMain.econ.withdrawPlayer( tOflPl, (double)tNextGroup.getRankCost() );
             if (eResp.transactionSuccess())
             {
-              _mMain.mGMHook.setGroup( player, tNextGroup.getRankName() );
+              NewHorizonsServerCore.perms.playerAddGroup( player, tNextGroup.getRankName() );
               pSender.sendMessage( String.format("You just Ranked up to %s by paying %d. Congratulations!", tNextGroup.getRankName(), tNextGroup.getRankCost()) );
             }
             else

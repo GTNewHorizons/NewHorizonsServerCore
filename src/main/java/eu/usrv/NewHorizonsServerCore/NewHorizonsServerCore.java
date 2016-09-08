@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.logging.Logger;
 
 import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -14,7 +15,6 @@ import com.huskehhh.mysql.sqlite.SQLite;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import eu.usrv.NewHorizonsServerCore.auxiliary.GMHook;
 import eu.usrv.NewHorizonsServerCore.modRankUp.RankUpCommand;
 import eu.usrv.NewHorizonsServerCore.modTrialKick.TrialKick;
 
@@ -31,8 +31,9 @@ public final class NewHorizonsServerCore extends JavaPlugin
   public TrialKick mModule_TrialKick;
   public static SQLite OfflineUUIDCache = null; // new SQLite( "OfflineUUIDCache.sqlite" );
   public Connection OUUIDCCon = null;
-  public GMHook mGMHook;
+
   public static Economy econ = null;
+  public static Permission perms = null;
 
   private RankUpCommand mModule_Rankup;
   public static Logger logger = null;
@@ -74,11 +75,10 @@ public final class NewHorizonsServerCore extends JavaPlugin
       getServer().getPluginManager().disablePlugin( this );
       return;
     }
-    
-    logger.info( "Connecting to GroupManager..." );
-    mGMHook = new GMHook( this );
-    logger.info( "Enabling TrialKick submodule..." );
-    mModule_TrialKick = new TrialKick( this );
+    setupPermissions();
+
+    //logger.info( "Enabling TrialKick submodule..." );
+    //mModule_TrialKick = new TrialKick( this );
 
     logger.info( "Registering RankUp command..." );
     mModule_Rankup = new RankUpCommand( this );
@@ -88,6 +88,13 @@ public final class NewHorizonsServerCore extends JavaPlugin
     // Not yet
     // logger.info( "Initializing Offline UUID Database..." );
     // setupDBCons();
+  }
+
+  private boolean setupPermissions()
+  {
+    RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration( Permission.class );
+    perms = rsp.getProvider();
+    return perms != null;
   }
 
   private boolean setupEconomy()
@@ -113,7 +120,9 @@ public final class NewHorizonsServerCore extends JavaPlugin
     saveConfig();
 
     // Disabling modules
-    mModule_TrialKick = null;
-    mModule_Rankup = null;
+    if (mModule_TrialKick != null)
+      mModule_TrialKick = null;
+    if (mModule_Rankup != null)
+      mModule_Rankup = null;
   }
 }

@@ -3,7 +3,7 @@
 <modelVersion>4.0.0</modelVersion>
   <groupId>eu.usrv</groupId>
   <artifactId>NewHorizonsServerCore</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.3-SNAPSHOT</version>
   <description>NewHorizonsServerCore</description>
 
    <build>
@@ -27,10 +27,6 @@
          <id>sk89repo</id>
          <url>http://maven.sk89q.com/repo</url>
        </repository>
-       <repository>
-         <id>essentials-repo</id>
-         <url>http://repo.ess3.net/content/groups/essentials</url>
-       </repository>
         <repository>
             <id>vault-repo</id>
             <url>http://nexus.hc.to/content/repositories/pub_releases</url>
@@ -44,12 +40,6 @@
            <type>jar</type>
            <scope>provided</scope>
        </dependency>
-      <dependency>
-          <groupId>net.ess3</groupId>
-          <artifactId>EssentialsGroupManager</artifactId>
-          <version>2.13.1</version>
-          <scope>provided</scope>
-      </dependency>
         <dependency>
             <groupId>net.milkbowl.vault</groupId>
             <artifactId>VaultAPI</artifactId>

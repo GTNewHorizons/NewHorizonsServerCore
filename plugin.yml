@@ -1,6 +1,6 @@
 name: NewHorizonsServerCore
 main: eu.usrv.NewHorizonsServerCore.NewHorizonsServerCore
-version: 0.2
+version: 0.0.3
 commands:
     rankup:
         description: Ranks you up in the ladder (If you have enough money for it)
