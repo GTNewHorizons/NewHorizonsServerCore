@@ -37,10 +37,14 @@ public class RankUpCommand implements CommandExecutor
 
     for( int i = 0; i < tTotalRanks; i++ )
     {
-      String tRankName = _mMain.mConfig.getString( String.format( "Rank_%d_Name", i ) );
-      Integer tRankCost = _mMain.mConfig.getInt( String.format( "Rank_%d_Cost", i ) );
+      String tRankName = _mMain.mConfig.getString( String.format( "Rank_%d_Name", i ), "NOEXIST" );
+      Integer tRankCost = _mMain.mConfig.getInt( String.format( "Rank_%d_Cost", i ), -1 );
+      
+      // Make sure the ranks are existing and well configured
+      if ( tRankName.equals( "NOEXIST" ) || tRankCost == -1)
+        break;
+      
       RankUpDefinition tRank = new RankUpDefinition( i, tRankCost, tRankName );
-
       NewHorizonsServerCore.logger.info( String.format( "[RankUp] Loaded new Rank; ID %d - Group \"%s\" Cost %d", tRank.getRankID(), tRank.getRankName(), tRank.getRankCost() ) );
       _mRanks.add( tRank );
     }
@@ -58,11 +62,13 @@ public class RankUpCommand implements CommandExecutor
 
     String tUserGroup = NewHorizonsServerCore.perms.getPrimaryGroup( player );
 
+    boolean tFoundUserGroupEntry = false;
     for( int i = 0; i < _mRanks.size(); i++ )
     {
       RankUpDefinition rud = _mRanks.get( i );
       if( rud.getRankName().equalsIgnoreCase( tUserGroup ) )
       {
+        tFoundUserGroupEntry = true;
         // Found current group. Get next group
         if( i + 1 == _mRanks.size() ) // Case 1: Player already has highest group
         {
@@ -72,7 +78,30 @@ public class RankUpCommand implements CommandExecutor
         else
         {
           RankUpDefinition tNextGroup = _mRanks.get( i + 1 );
+          
+          // Make sure GroupManager is aware of this group
+          boolean tFoundGroup = false;
+          for ( String tGroup : NewHorizonsServerCore.perms.getGroups() )
+          {
+            if ( tGroup.equalsIgnoreCase( tNextGroup.getRankName() ) )
+              tFoundGroup = true;
+          }
+          
+          if ( !tFoundGroup )
+          {
+            pSender.sendMessage( "[RankUp] " + ChatColor.RED + "E:TARGETRANK_NOT_FOUND" );
+            pSender.sendMessage( "[RankUp] " + ChatColor.RED + "Sorry something went wrong. Please contact a mod/admin!" );
+            return true;
+          }
+          
           OfflinePlayer tOflPl = Bukkit.getServer().getOfflinePlayer( player.getUniqueId() );
+          if ( tOflPl == null )
+          {
+            pSender.sendMessage( "[RankUp] " + ChatColor.RED + "E:PLAYER_NOT_FOUND" );
+            pSender.sendMessage( "[RankUp] " + ChatColor.RED + "Sorry something went wrong. Please contact a mod/admin!" );
+            return true;
+          }
+          
           double tBalance = NewHorizonsServerCore.econ.getBalance( tOflPl );
           String tGroupNameForChat = Utils.capitalizeFirst( tNextGroup.getRankName() );
 
@@ -111,12 +140,19 @@ public class RankUpCommand implements CommandExecutor
             }
             else
             {
+              pSender.sendMessage( "[RankUp] " + ChatColor.RED + "E:MONEYTRANSFER_FAILED" );
               pSender.sendMessage( "[RankUp] " + ChatColor.RED + "Sorry something went wrong. Please contact a mod/admin!" );
             }
             return true;
           }
         }
       }
+    }
+    if ( !tFoundUserGroupEntry )
+    {
+      pSender.sendMessage( "[RankUp] " + ChatColor.RED + "E:PLAYERRANK_NOT_FOUND" );
+      pSender.sendMessage( "[RankUp] " + ChatColor.RED + "Sorry something went wrong. Please contact a mod/admin!" );
+      return true;
     }
 
     return false;
