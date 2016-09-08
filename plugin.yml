@@ -1,3 +1,9 @@
 name: NewHorizonsServerCore
 main: eu.usrv.NewHorizonsServerCore.NewHorizonsServerCore
-version: 0.1
+version: 0.0.3
+commands:
+    rankup:
+        description: Ranks you up in the ladder (If you have enough money for it)
+        usage: /rankup
+        permission: nhservercore.rankup
+        permission-message: You don't have the permission to do that!

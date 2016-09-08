@@ -3,3 +3,16 @@ Messages:
   BannedMessage: '&4Your trial has finished! &2Contact an Admin to get full access'
   KickMessage: '&4Your trial has ended. &2Contact an Admin to get full access'
   TrialWarning: 'This was death %d. Your trial ends if you reach %d'
+NumRanks: 6
+Rank_0_Cost: 0
+Rank_1_Cost: 20000
+Rank_2_Cost: 50000
+Rank_3_Cost: 75000
+Rank_4_Cost: 100000
+Rank_5_Cost: 20000000
+Rank_0_Name: newbie
+Rank_1_Name: dweller
+Rank_2_Name: villager
+Rank_3_Name: resident
+Rank_4_Name: citizen
+Rank_5_Name: elite
