@@ -2,19 +2,18 @@
 package eu.usrv.NewHorizonsServerCore;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.logging.Logger;
 
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.configuration.file.FileConfiguration;
-
-import com.huskehhh.mysql.sqlite.SQLite;
-
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.huskehhh.mysql.sqlite.SQLite;
+
+import eu.usrv.NewHorizonsServerCore.auxiliary.FXHelper;
 import eu.usrv.NewHorizonsServerCore.modRankUp.RankUpCommand;
 import eu.usrv.NewHorizonsServerCore.modTrialKick.TrialKick;
 
@@ -26,11 +25,12 @@ import eu.usrv.NewHorizonsServerCore.modTrialKick.TrialKick;
 
 public final class NewHorizonsServerCore extends JavaPlugin
 {
-  public NewHorizonsServerCore Instance;
+  public static NewHorizonsServerCore Instance;
   public FileConfiguration mConfig;
   public TrialKick mModule_TrialKick;
   public static SQLite OfflineUUIDCache = null; // new SQLite( "OfflineUUIDCache.sqlite" );
   public Connection OUUIDCCon = null;
+  public FXHelper fx = null;
 
   public static Economy econ = null;
   public static Permission perms = null;
@@ -76,14 +76,16 @@ public final class NewHorizonsServerCore extends JavaPlugin
       return;
     }
     setupPermissions();
+    
+    fx = new FXHelper();
 
-    //logger.info( "Enabling TrialKick submodule..." );
-    //mModule_TrialKick = new TrialKick( this );
+    // logger.info( "Enabling TrialKick submodule..." );
+    // mModule_TrialKick = new TrialKick( this );
 
     logger.info( "Registering RankUp command..." );
     mModule_Rankup = new RankUpCommand( this );
     getCommand( "rankup" ).setExecutor( mModule_Rankup );
-    getServer().getPluginManager().registerEvents( mModule_TrialKick, this );
+    // getServer().getPluginManager().registerEvents( mModule_TrialKick, this );
 
     // Not yet
     // logger.info( "Initializing Offline UUID Database..." );
@@ -120,9 +122,9 @@ public final class NewHorizonsServerCore extends JavaPlugin
     saveConfig();
 
     // Disabling modules
-    if (mModule_TrialKick != null)
+    if( mModule_TrialKick != null )
       mModule_TrialKick = null;
-    if (mModule_Rankup != null)
+    if( mModule_Rankup != null )
       mModule_Rankup = null;
   }
 }
