@@ -18,3 +18,5 @@ First, install [Maven](https://maven.apache.org/) (or use IntelliJ's built-in).
 1. Make sure JAVA_HOME points to Java 8
 2. Run `mvn package`
 3. Find the jar in `target/NewHorizonsServerCore-VERSION.jar`
+
+To build with the git version number like in CI, use `mvn -B package "-Drevision=$(git describe --tags)"`.

@@ -58,4 +58,12 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
+
+    <distributionManagement>
+        <repository>
+            <id>gtnh</id>
+            <name>GT New Horizons</name>
+            <url>http://jenkins.usrv.eu:8081/nexus/content/groups/public/</url>
+        </repository>
+    </distributionManagement>
 </project>

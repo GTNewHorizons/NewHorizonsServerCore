@@ -1,0 +1,13 @@
+<settings xmlns="http://maven.apache.org/SETTINGS/1.2.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.2.0 http://maven.apache.org/xsd/settings-1.2.0.xsd">
+    <!-- https://stackoverflow.com/questions/67001968/how-to-disable-maven-blocking-external-http-repositories -->
+    <mirrors>
+        <mirror>
+            <id>gtnh-http-unblocker</id>
+            <mirrorOf>gtnh</mirrorOf>
+            <name>GTNH HTTP unblocker</name>
+            <url>http://jenkins.usrv.eu:8081/nexus/content/groups/public/</url>
+        </mirror>
+    </mirrors>
+</settings>
