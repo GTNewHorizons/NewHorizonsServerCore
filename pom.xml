@@ -70,7 +70,7 @@
         <repository>
             <id>gtnh</id>
             <name>GT New Horizons</name>
-            <url>http://jenkins.usrv.eu:8081/nexus/content/groups/public/</url>
+            <url>http://jenkins.usrv.eu:8081/nexus/content/repositories/releases</url>
         </repository>
     </distributionManagement>
 </project>

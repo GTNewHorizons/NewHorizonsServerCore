@@ -7,7 +7,7 @@
             <id>gtnh-http-unblocker</id>
             <mirrorOf>gtnh</mirrorOf>
             <name>GTNH HTTP unblocker</name>
-            <url>http://jenkins.usrv.eu:8081/nexus/content/groups/public/</url>
+            <url>http://jenkins.usrv.eu:8081/nexus/content/repositories/releases</url>
         </mirror>
     </mirrors>
     <servers>
