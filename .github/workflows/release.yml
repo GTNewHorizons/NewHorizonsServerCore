@@ -1,0 +1,60 @@
+name: Build
+
+on:
+  push:
+    tags: ['*']
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    env:
+      RELEASE_VERSION: ${{ github.ref_name }}
+    steps:
+    - name: Checkout mod repo
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - name: Set up JDK 8
+      uses: actions/setup-java@v3
+      with:
+        java-version: 8
+        distribution: 'zulu'
+        cache: maven
+        server-id: gtnh
+        server-username: MAVEN_USER
+        server-password: MAVEN_PASSWORD
+
+    - name: Compile
+      run: mvn -B package "-Drevision=${{ github.ref_name }}" --file pom.xml
+
+    - name: Delete old release if it already exists
+      run: gh release delete --yes "${RELEASE_VERSION}"
+      continue-on-error: true
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Release under current tag
+      run: |
+        export "CHANGELOG_FILE=$(mktemp --suffix=.md)"
+        echo "CHANGELOG_FILE=${CHANGELOG_FILE}" >> $GITHUB_ENV
+        gh api --method POST -H "Accept: application/vnd.github+json" \
+          "/repos/${GITHUB_REPOSITORY}/releases/generate-notes" \
+          -f tag_name="${RELEASE_VERSION}" \
+          --jq ".body" > "${CHANGELOG_FILE}"
+        cat "${CHANGELOG_FILE}"
+        gh release create "${RELEASE_VERSION}" -F "${CHANGELOG_FILE}" ./target/*.jar
+      shell: bash
+      continue-on-error: true
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Publish to Maven, Modrinth and CurseForge
+      run: mvn -B deploy "-Drevision=${{ github.ref_name }}" --file pom.xml
+      continue-on-error: true
+      env:
+        MAVEN_USER: ${{ secrets.MAVEN_USER }}
+        MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}

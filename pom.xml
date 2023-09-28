@@ -1,50 +1,69 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-<modelVersion>4.0.0</modelVersion>
-  <groupId>eu.usrv</groupId>
-  <artifactId>NewHorizonsServerCore</artifactId>
-  <version>0.0.4-SNAPSHOT</version>
-  <description>NewHorizonsServerCore</description>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>eu.usrv</groupId>
+    <artifactId>NewHorizonsServerCore</artifactId>
+    <version>${revision}</version>
+    <description>NewHorizonsServerCore</description>
 
-   <build>
-      <plugins>
-          <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-compiler-plugin</artifactId>
-              <configuration>
-                  <source>1.7</source>
-                  <target>1.7</target>
-              </configuration>
-          </plugin>
-      </plugins>
-   </build>
-   <repositories>
-       <repository>
-         <id>bukkit-repo</id>
-         <url>http://repo.bukkit.org/content/groups/public/</url>
-       </repository>
-       <repository>
-         <id>sk89repo</id>
-         <url>http://maven.sk89q.com/repo</url>
-       </repository>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <revision>DEV-SNAPSHOT</revision> <!-- Overridden by CI -->
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.0</version>
+            </plugin>
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.0.2</version>
+            </plugin>
+        </plugins>
+    </build>
+    <repositories>
+        <repository>
+            <id>bukkit-repo</id>
+            <url>https://repo.minebench.de/</url>
+            <releases>
+                <checksumPolicy>ignore</checksumPolicy>
+                <updatePolicy>daily</updatePolicy>
+            </releases>
+        </repository>
         <repository>
             <id>vault-repo</id>
-            <url>http://nexus.hc.to/content/repositories/pub_releases</url>
+            <url>https://nexus.hc.to/content/repositories/pub_releases/</url>
+            <releases>
+                <checksumPolicy>ignore</checksumPolicy>
+                <updatePolicy>daily</updatePolicy>
+            </releases>
         </repository>
-   </repositories>
-   <dependencies>
-       <dependency>
-           <groupId>org.bukkit</groupId>
-           <artifactId>bukkit</artifactId>
-           <version>1.7.9-R0.2</version>
-           <type>jar</type>
-           <scope>provided</scope>
-       </dependency>
+    </repositories>
+    <dependencies>
+        <dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>bukkit</artifactId>
+            <version>1.7.10-R0.1-SNAPSHOT</version>
+            <type>jar</type>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>net.milkbowl.vault</groupId>
             <artifactId>VaultAPI</artifactId>
             <version>1.4</version>
             <scope>provided</scope>
         </dependency>
-   </dependencies>
+    </dependencies>
+
+    <distributionManagement>
+        <repository>
+            <id>gtnh</id>
+            <name>GT New Horizons</name>
+            <url>http://jenkins.usrv.eu:8081/nexus/content/groups/public/</url>
+        </repository>
+    </distributionManagement>
 </project>
