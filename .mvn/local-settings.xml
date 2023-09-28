@@ -10,4 +10,11 @@
             <url>http://jenkins.usrv.eu:8081/nexus/content/groups/public/</url>
         </mirror>
     </mirrors>
+    <servers>
+        <server>
+            <id>gtnh</id>
+            <username>${env.MAVEN_USER}</username>
+            <password>${env.MAVEN_PASSWORD}</password>
+        </server>
+    </servers>
 </settings>
