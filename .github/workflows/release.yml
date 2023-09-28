@@ -1,4 +1,4 @@
-name: Build
+name: Release
 
 on:
   push:
@@ -8,7 +8,7 @@ permissions:
   contents: write
 
 jobs:
-  build-and-test:
+  release:
     runs-on: ubuntu-latest
     env:
       RELEASE_VERSION: ${{ github.ref_name }}
