@@ -1,8 +1,3 @@
-MaxDeath: 10 # Max amount of deaths before the module will start to verify join-permission
-Messages:
-  BannedMessage: '&4Your trial has finished! &2Contact an Admin to get full access'
-  KickMessage: '&4Your trial has ended. &2Contact an Admin to get full access'
-  TrialWarning: 'This was death %d. Your trial ends if you reach %d'
 NumRanks: 6
 Rank_0_Cost: 0
 Rank_1_Cost: 20000
@@ -16,3 +11,9 @@ Rank_2_Name: villager
 Rank_3_Name: resident
 Rank_4_Name: citizen
 Rank_5_Name: elite
+MySQL_Host: localhost
+MySQL_Port: 3306
+MySQL_Database: database
+MySQL_User: user
+MySQL_Password: password
+ServerID: set_server_id

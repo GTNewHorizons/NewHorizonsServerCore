@@ -1,5 +1,5 @@
 
-package eu.usrv.NewHorizonsServerCore.modTrialKick.DBO;
+package eu.usrv.NewHorizonsServerCore.auxiliary;
 
 public interface IDBO_SQLFields
 {

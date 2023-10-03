@@ -1,9 +1,10 @@
 
 package eu.usrv.NewHorizonsServerCore;
 
-import java.sql.Connection;
 import java.util.logging.Logger;
 
+import com.huskehhh.mysql.mysql.MySQL;
+import eu.usrv.NewHorizonsServerCore.modCmdExecuter.GTNHCommandExecutor;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
@@ -11,11 +12,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.huskehhh.mysql.sqlite.SQLite;
-
 import eu.usrv.NewHorizonsServerCore.auxiliary.FXHelper;
 import eu.usrv.NewHorizonsServerCore.modRankUp.RankUpCommand;
-import eu.usrv.NewHorizonsServerCore.modTrialKick.TrialKick;
 
 
 /*
@@ -27,14 +25,14 @@ public final class NewHorizonsServerCore extends JavaPlugin
 {
   public static NewHorizonsServerCore Instance;
   public FileConfiguration mConfig;
-  public TrialKick mModule_TrialKick;
-  public static SQLite OfflineUUIDCache = null; // new SQLite( "OfflineUUIDCache.sqlite" );
-  public Connection OUUIDCCon = null;
+
+  public MySQL DBConnection = null;
   public FXHelper fx = null;
 
   public static Economy econ = null;
   public static Permission perms = null;
 
+  public GTNHCommandExecutor mModule_CommandExecutor = null;
   private RankUpCommand mModule_Rankup;
   public static Logger logger = null;
 
@@ -44,23 +42,17 @@ public final class NewHorizonsServerCore extends JavaPlugin
     logger = getLogger();
   }
 
-  /*
+
     private void setupDBCons()
     {
-      try
-      {
-        OUUIDCCon = OfflineUUIDCache.openConnection();
-      }
-      catch( ClassNotFoundException e )
-      {
-        e.printStackTrace();
-      }
-      catch( SQLException e )
-      {
-        e.printStackTrace();
-      }
+      DBConnection = new MySQL(
+              mConfig.getString( "MySQL_Host", "localhost" ),
+              mConfig.getString( "MySQL_Port", "3306" ),
+              mConfig.getString( "MySQL_Database", "database" ),
+              mConfig.getString( "MySQL_User", "user" ),
+              mConfig.getString( "MySQL_Password", "password" ));
     }
-  */
+
   @Override
   public void onEnable()
   {
@@ -79,17 +71,16 @@ public final class NewHorizonsServerCore extends JavaPlugin
     
     fx = new FXHelper();
 
-    // logger.info( "Enabling TrialKick submodule..." );
-    // mModule_TrialKick = new TrialKick( this );
-
     logger.info( "Registering RankUp command..." );
     mModule_Rankup = new RankUpCommand( this );
     getCommand( "rankup" ).setExecutor( mModule_Rankup );
     // getServer().getPluginManager().registerEvents( mModule_TrialKick, this );
 
-    // Not yet
-    // logger.info( "Initializing Offline UUID Database..." );
-    // setupDBCons();
+    logger.info("Starting CommandExecutor...");
+    mModule_CommandExecutor = new GTNHCommandExecutor(this);
+
+    logger.info( "Initializing Database connection..." );
+    setupDBCons();
   }
 
   private boolean setupPermissions()
@@ -122,9 +113,11 @@ public final class NewHorizonsServerCore extends JavaPlugin
     saveConfig();
 
     // Disabling modules
-    if( mModule_TrialKick != null )
-      mModule_TrialKick = null;
     if( mModule_Rankup != null )
       mModule_Rankup = null;
+    if (mModule_CommandExecutor != null) {
+      mModule_CommandExecutor.Shutdown();
+      mModule_CommandExecutor = null;
+    }
   }
 }

@@ -2,18 +2,11 @@
 package eu.usrv.NewHorizonsServerCore.auxiliary;
 
 import java.lang.reflect.Field;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Date;
 import java.util.Hashtable;
-import java.util.Set;
 import java.util.UUID;
 
 import eu.usrv.NewHorizonsServerCore.NewHorizonsServerCore;
-import eu.usrv.NewHorizonsServerCore.modTrialKick.DBO.IDBO_SQLFields;
-import eu.usrv.NewHorizonsServerCore.modTrialKick.DBO.DBO_UUIDEntry.SQLFIELDS;
 
 
 public abstract class DBOBase
@@ -187,7 +180,7 @@ public abstract class DBOBase
     boolean tRet = false;
     try
     {
-      ResultSet tRes = NewHorizonsServerCore.OfflineUUIDCache.querySQL( getLoadCommand() );
+      ResultSet tRes = null;//NewHorizonsServerCore.OfflineUUIDCache.querySQL( getLoadCommand() );
 
       if( tRes != null )
       {
