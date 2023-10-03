@@ -67,14 +67,17 @@ public final class NewHorizonsServerCore extends JavaPlugin
       getServer().getPluginManager().disablePlugin( this );
       return;
     }
-    setupPermissions();
-    
     fx = new FXHelper();
-
-    logger.info( "Registering RankUp command..." );
-    mModule_Rankup = new RankUpCommand( this );
-    getCommand( "rankup" ).setExecutor( mModule_Rankup );
-    // getServer().getPluginManager().registerEvents( mModule_TrialKick, this );
+    if (!setupPermissions())
+    {
+      logger.severe("Unable to hook into Bukkit's Permission Provider. Commands cannot be registered");
+    }
+    else
+    {
+      logger.info( "Registering RankUp command..." );
+      mModule_Rankup = new RankUpCommand( this );
+      getCommand( "rankup" ).setExecutor( mModule_Rankup );
+    }
 
     logger.info("Starting CommandExecutor...");
     mModule_CommandExecutor = new GTNHCommandExecutor(this);

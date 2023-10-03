@@ -105,6 +105,7 @@ public class GTNHCommandExecutor {
                     NewHorizonsServerCore.logger.fine(String.format("[CommandExecutor] Processing command ID %d: %s", dboPendingCommandEntry.commandSetIndex, dboPendingCommandEntry.commandText));
                     if (dboPendingCommandEntry.waitBefore > 0) {
                         NewHorizonsServerCore.logger.fine(String.format("[CommandExecutor] waitBefore is set.. Going to sleep for %d seconds", dboPendingCommandEntry.waitBefore));
+                        // YES this is a sleep in a loop... Suggestions are welcome...
                         Thread.sleep(dboPendingCommandEntry.waitBefore * 1000);
                     }
 
